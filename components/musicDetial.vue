@@ -23,6 +23,21 @@
 				<i class="iconfont iconjianyi"></i>
 			</view>
 		</view>
+		<!--进度条部分-->
+		<view class="progress">
+			<view class="left">
+				<text>{{ $utils.formatSongTime(currentTime) }}</text>
+			</view>
+			<view class="pro">
+				<view class="progress-box">
+					<progress :percent="percent" stroke-width="3" />
+				</view>
+			</view>
+			<view class="right">
+				<text>{{ duration }}</text>
+			</view>
+		</view>
+		
 		<!-- 按钮部分 -->
 		<view class="bottom">
 			<view class="model">
@@ -50,6 +65,7 @@
 
 <script>
 	import { getMusic,getMusicWorld,getMusicDetail,getSimiMusic } from '@/api/index.js'
+	import utils from '@/utils/utils.js'
 	const innerAudioContext = uni.createInnerAudioContext();
 	export default {
 		data() {
@@ -64,6 +80,10 @@
 				model:0,//模式切换（0、列表循环，1、随机播放，2、单曲循环）
 				like:false,//是否喜欢
 				simiMusicIdArray:[],//相似音乐的id
+				duration:0,//当前音频总共长度
+				currentTime:'00:00',//当前播放时长
+				currentTimeTimeout:'',//定时器
+				percent:0,//进度条
 			}
 		},
 		async onLoad(options) {
@@ -77,17 +97,25 @@
 			async getMusicItem(){
 				this.song = await getMusic(this.id)
 				this.songDetial = await getMusicDetail(this.id)
+				console.log(this.songDetial.dt)
+				this.duration = utils.formatSongTime(this.songDetial.dt)
 			},
 			// 控制播放按钮
 			playHandle(){
 				this.play = !this.play
 				this.playMusic()
 			},
-			//音乐播放赞同操作
+			//音乐播放暂停操作
 			playMusic(){
 				innerAudioContext.src = this.song.url;
+				this.currentTimeTimeout = setTimeout(() => {
+					innerAudioContext.duration
+				    innerAudioContext.onTimeUpdate(() => {
+				      this.currentTime = (innerAudioContext.currentTime)*1000 //当前播放进度
+				    })
+				  }, 500)
 				if(this.play){
-					innerAudioContext.play();
+				innerAudioContext.play();
 				}else{
 					innerAudioContext.pause() //暂停
 				}
@@ -109,17 +137,13 @@
 			},
 			//下一首歌曲
 			async next(){
+				this.play = true
 				await this.getSimiMusicHandle()
-				await this.getMusicItem()
-				await this.playMusic()
-				await this.getMusicWord()
 			},
 			//上一首歌曲
 			async up(){
+				this.play = true
 				await this.getSimiMusicHandle()
-				await this.getMusicItem()
-				await this.playMusic()
-				await this.getMusicWord()
 			},
 			//切换是否喜欢
 			likeToggle(){
@@ -129,7 +153,6 @@
 			async getSimiMusicHandle(){
 				let simiMusicArray = await getSimiMusic(this.id)
 				this.simiMusicIdArray = simiMusicArray.map((item)=>item.privilege.id)
-				console.log(this.simiMusicIdArray)
 				this.id = this.simiMusicIdArray[parseInt(Math.random()*5)]
 			}
 		},
@@ -138,12 +161,22 @@
 				innerAudioContext.loop = false
 				if(newValue===0){
 				}else if(newValue===1){
-					this.getSimiMusicHandle()
+					
 				}else if(newValue===2){
 					this.loop = true
 					innerAudioContext.loop = this.loop
 				}
-			}
+			},
+			id:async function(newValue,oldValue){
+				await this.getMusicItem()
+				await this.playMusic()
+				await this.getMusicWord()
+			},
+			currentTime:function(newValue,oldValue){
+				console.log(newValue,this.songDetial.dt)
+				console.log(Math.ceil((newValue/this.songDetial.dt)*100))
+				this.percent = Math.ceil((newValue/this.songDetial.dt)*100)
+			},
 		}
 	}
 </script>
@@ -153,7 +186,8 @@
 	position: relative;
 	min-height: 100vh;
 	.top{
-		height: 900rpx;
+		height: 740rpx;
+		width: 750rpx;
 		position: relative;    
 		overflow-y: auto;
 		.imgView{
@@ -175,13 +209,34 @@
 		justify-content: space-around;
 		box-sizing: border-box;
 		position: absolute;
-		bottom: 250rpx;
+		bottom: 350rpx;
 		width: 750rpx;
 		i{
 			font-size: 60rpx;
 		}
 		.iconxihuan1{
 			color: red;
+		}
+	}
+	
+	.progress{
+		display: flex;
+		padding: 0 20rpx;
+		justify-content: space-between;
+		align-items: center;
+		position: absolute;
+		bottom: 250rpx;
+		width: 750rpx;
+		box-sizing: border-box;
+		.left{
+			flex: 1;
+		}
+		.pro{
+			flex: 3;
+		}
+		.right{
+			flex: 1;
+			text-align: right;
 		}
 	}
 	.bottom{

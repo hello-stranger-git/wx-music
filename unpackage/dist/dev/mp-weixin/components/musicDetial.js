@@ -97,6 +97,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var g0 = _vm.$utils.formatSongTime(_vm.currentTime)
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        g0: g0
+      }
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -181,7 +190,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _index = __webpack_require__(/*! @/api/index.js */ 22);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _index = __webpack_require__(/*! @/api/index.js */ 22);
+var _utils = _interopRequireDefault(__webpack_require__(/*! @/utils/utils.js */ 56));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}
 var innerAudioContext = uni.createInnerAudioContext();var _default =
 {
   data: function data() {
@@ -195,7 +220,11 @@ var innerAudioContext = uni.createInnerAudioContext();var _default =
       loop: false, //是否循环
       model: 0, //模式切换（0、列表循环，1、随机播放，2、单曲循环）
       like: false, //是否喜欢
-      simiMusicIdArray: [] //相似音乐的id
+      simiMusicIdArray: [], //相似音乐的id
+      duration: 0, //当前音频总共长度
+      currentTime: '00:00', //当前播放时长
+      currentTimeTimeout: '', //定时器
+      percent: 0 //进度条
     };
   },
   onLoad: function onLoad(options) {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
@@ -208,16 +237,24 @@ var innerAudioContext = uni.createInnerAudioContext();var _default =
     // 获取音乐以及歌曲详情
     getMusicItem: function getMusicItem() {var _this2 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:_context2.next = 2;return (
                   (0, _index.getMusic)(_this2.id));case 2:_this2.song = _context2.sent;_context2.next = 5;return (
-                  (0, _index.getMusicDetail)(_this2.id));case 5:_this2.songDetial = _context2.sent;case 6:case "end":return _context2.stop();}}}, _callee2);}))();
+                  (0, _index.getMusicDetail)(_this2.id));case 5:_this2.songDetial = _context2.sent;
+                console.log(_this2.songDetial.dt);
+                _this2.duration = _utils.default.formatSongTime(_this2.songDetial.dt);case 8:case "end":return _context2.stop();}}}, _callee2);}))();
     },
     // 控制播放按钮
     playHandle: function playHandle() {
       this.play = !this.play;
       this.playMusic();
     },
-    //音乐播放赞同操作
-    playMusic: function playMusic() {
+    //音乐播放暂停操作
+    playMusic: function playMusic() {var _this3 = this;
       innerAudioContext.src = this.song.url;
+      this.currentTimeTimeout = setTimeout(function () {
+        innerAudioContext.duration;
+        innerAudioContext.onTimeUpdate(function () {
+          _this3.currentTime = innerAudioContext.currentTime * 1000; //当前播放进度
+        });
+      }, 500);
       if (this.play) {
         innerAudioContext.play();
       } else {
@@ -225,8 +262,8 @@ var innerAudioContext = uni.createInnerAudioContext();var _default =
       }
     },
     //获取歌词操作
-    getMusicWord: function getMusicWord() {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:_context3.next = 2;return (
-                  (0, _index.getMusicWorld)(_this3.id));case 2:_this3.musicWord = _context3.sent;case 3:case "end":return _context3.stop();}}}, _callee3);}))();
+    getMusicWord: function getMusicWord() {var _this4 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:_context3.next = 2;return (
+                  (0, _index.getMusicWorld)(_this4.id));case 2:_this4.musicWord = _context3.sent;case 3:case "end":return _context3.stop();}}}, _callee3);}))();
     },
     //切换歌词与图片
     toggleWordHanldle: function toggleWordHanldle() {
@@ -240,29 +277,24 @@ var innerAudioContext = uni.createInnerAudioContext();var _default =
       }
     },
     //下一首歌曲
-    next: function next() {var _this4 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {return _regenerator.default.wrap(function _callee4$(_context4) {while (1) {switch (_context4.prev = _context4.next) {case 0:_context4.next = 2;return (
-                  _this4.getSimiMusicHandle());case 2:_context4.next = 4;return (
-                  _this4.getMusicItem());case 4:_context4.next = 6;return (
-                  _this4.playMusic());case 6:_context4.next = 8;return (
-                  _this4.getMusicWord());case 8:case "end":return _context4.stop();}}}, _callee4);}))();
+    next: function next() {var _this5 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {return _regenerator.default.wrap(function _callee4$(_context4) {while (1) {switch (_context4.prev = _context4.next) {case 0:
+                _this5.play = true;_context4.next = 3;return (
+                  _this5.getSimiMusicHandle());case 3:case "end":return _context4.stop();}}}, _callee4);}))();
     },
     //上一首歌曲
-    up: function up() {var _this5 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {return _regenerator.default.wrap(function _callee5$(_context5) {while (1) {switch (_context5.prev = _context5.next) {case 0:_context5.next = 2;return (
-                  _this5.getSimiMusicHandle());case 2:_context5.next = 4;return (
-                  _this5.getMusicItem());case 4:_context5.next = 6;return (
-                  _this5.playMusic());case 6:_context5.next = 8;return (
-                  _this5.getMusicWord());case 8:case "end":return _context5.stop();}}}, _callee5);}))();
+    up: function up() {var _this6 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {return _regenerator.default.wrap(function _callee5$(_context5) {while (1) {switch (_context5.prev = _context5.next) {case 0:
+                _this6.play = true;_context5.next = 3;return (
+                  _this6.getSimiMusicHandle());case 3:case "end":return _context5.stop();}}}, _callee5);}))();
     },
     //切换是否喜欢
     likeToggle: function likeToggle() {
       this.like = !this.like;
     },
     //获取相似歌曲
-    getSimiMusicHandle: function getSimiMusicHandle() {var _this6 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {var simiMusicArray;return _regenerator.default.wrap(function _callee6$(_context6) {while (1) {switch (_context6.prev = _context6.next) {case 0:_context6.next = 2;return (
-                  (0, _index.getSimiMusic)(_this6.id));case 2:simiMusicArray = _context6.sent;
-                _this6.simiMusicIdArray = simiMusicArray.map(function (item) {return item.privilege.id;});
-                console.log(_this6.simiMusicIdArray);
-                _this6.id = _this6.simiMusicIdArray[parseInt(Math.random() * 5)];case 6:case "end":return _context6.stop();}}}, _callee6);}))();
+    getSimiMusicHandle: function getSimiMusicHandle() {var _this7 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {var simiMusicArray;return _regenerator.default.wrap(function _callee6$(_context6) {while (1) {switch (_context6.prev = _context6.next) {case 0:_context6.next = 2;return (
+                  (0, _index.getSimiMusic)(_this7.id));case 2:simiMusicArray = _context6.sent;
+                _this7.simiMusicIdArray = simiMusicArray.map(function (item) {return item.privilege.id;});
+                _this7.id = _this7.simiMusicIdArray[parseInt(Math.random() * 5)];case 5:case "end":return _context6.stop();}}}, _callee6);}))();
     } },
 
   watch: {
@@ -270,11 +302,21 @@ var innerAudioContext = uni.createInnerAudioContext();var _default =
       innerAudioContext.loop = false;
       if (newValue === 0) {
       } else if (newValue === 1) {
-        this.getSimiMusicHandle();
+
       } else if (newValue === 2) {
         this.loop = true;
         innerAudioContext.loop = this.loop;
       }
+    },
+    id: function () {var _id = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(newValue, oldValue) {return _regenerator.default.wrap(function _callee7$(_context7) {while (1) {switch (_context7.prev = _context7.next) {case 0:_context7.next = 2;return (
+                  this.getMusicItem());case 2:_context7.next = 4;return (
+                  this.playMusic());case 4:_context7.next = 6;return (
+                  this.getMusicWord());case 6:case "end":return _context7.stop();}}}, _callee7, this);}));function id(_x, _x2) {return _id.apply(this, arguments);}return id;}(),
+
+    currentTime: function currentTime(newValue, oldValue) {
+      console.log(newValue, this.songDetial.dt);
+      console.log(Math.ceil(newValue / this.songDetial.dt * 100));
+      this.percent = Math.ceil(newValue / this.songDetial.dt * 100);
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
