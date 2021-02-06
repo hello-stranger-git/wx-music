@@ -1,0 +1,37 @@
+{
+  "description": "项目配置文件。",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "",
+  "appid": "wxb4d369cfa4a43cd7",
+  "projectname": "shop",
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "components/musicDetial",
+          "pathName": "components/musicDetial",
+          "query": "id=1495496315",
+          "scene": null
+        }
+      ]
+    }
+  }
+}
