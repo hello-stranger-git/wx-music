@@ -22,17 +22,34 @@
           animation: rotate-data-v-22eea6fb 8s linear infinite;
   box-shadow: 10px 10px 50rpx #888888;
 }
+.musicDetail .center.data-v-22eea6fb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 250rpx;
+  width: 750rpx;
+}
+.musicDetail .center ._i.data-v-22eea6fb {
+  font-size: 60rpx;
+}
+.musicDetail .center .iconxihuan1.data-v-22eea6fb {
+  color: red;
+}
 .musicDetail .bottom.data-v-22eea6fb {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-around;
           justify-content: space-around;
-  position: absolute;
-  bottom: 100rpx;
   width: 750rpx;
   padding: 0 70rpx;
   box-sizing: border-box;
+  position: absolute;
+  bottom: 80rpx;
 }
 .musicDetail .bottom ._i.data-v-22eea6fb {
   font-size: 100rpx;

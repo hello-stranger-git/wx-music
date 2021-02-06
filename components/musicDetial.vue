@@ -10,6 +10,19 @@
 				<text @click="toggleWordHanldle">{{ musicWord.lyric }}</text>
 			</view>
 		</view>
+		<!--中间操作部分-->
+		<view class="center">
+			<view class="like">
+				<i class="iconfont iconxihuan" v-if="!like" @click="likeToggle"></i>
+				<i v-else class="iconfont iconxihuan1" @click="likeToggle"></i>
+			</view>
+			<view class="downLoad">
+				<i class="iconfont icondownload"></i>
+			</view>
+			<view class="comment">
+				<i class="iconfont iconjianyi"></i>
+			</view>
+		</view>
 		<!-- 按钮部分 -->
 		<view class="bottom">
 			<view class="model">
@@ -19,13 +32,13 @@
 			</view>
 			<view class="play">
 				<view class="left">
-					<i class="iconfont iconjiantou_xianxing_zuo"/>
+					<i class="iconfont iconjiantou_xianxing_zuo" @click="up"/>
 				</view>
 				<view class="play">
 					<i :class="['iconfont',play?'iconicon_bofang':'iconbofang1']" @click="playHandle"/>
 				</view>
 				<view class="right">
-					<i class="iconfont iconjiantou_xianxing_you"/>
+					<i class="iconfont iconjiantou_xianxing_you" @click="next"/>
 				</view> 		
 			</view>
 			<view class="list">
@@ -36,7 +49,7 @@
 </template>
 
 <script>
-	import { getMusic,getMusicWorld,getMusicDetail } from '@/api/index.js'
+	import { getMusic,getMusicWorld,getMusicDetail,getSimiMusic } from '@/api/index.js'
 	const innerAudioContext = uni.createInnerAudioContext();
 	export default {
 		data() {
@@ -49,6 +62,8 @@
 				toggleWord:false,//歌词与封面的切换
 				loop:false,//是否循环
 				model:0,//模式切换（0、列表循环，1、随机播放，2、单曲循环）
+				like:false,//是否喜欢
+				simiMusicIdArray:[],//相似音乐的id
 			}
 		},
 		async onLoad(options) {
@@ -91,19 +106,42 @@
 				if(this.model>2){
 					this.model=0
 				}
+			},
+			//下一首歌曲
+			async next(){
+				await this.getSimiMusicHandle()
+				await this.getMusicItem()
+				await this.playMusic()
+				await this.getMusicWord()
+			},
+			//上一首歌曲
+			async up(){
+				await this.getSimiMusicHandle()
+				await this.getMusicItem()
+				await this.playMusic()
+				await this.getMusicWord()
+			},
+			//切换是否喜欢
+			likeToggle(){
+				this.like = !this.like
+			},
+			//获取相似歌曲
+			async getSimiMusicHandle(){
+				let simiMusicArray = await getSimiMusic(this.id)
+				this.simiMusicIdArray = simiMusicArray.map((item)=>item.privilege.id)
+				console.log(this.simiMusicIdArray)
+				this.id = this.simiMusicIdArray[parseInt(Math.random()*5)]
 			}
 		},
 		watch:{
 			model:function(newValue,oldValue){
+				innerAudioContext.loop = false
 				if(newValue===0){
-					
 				}else if(newValue===1){
-					
+					this.getSimiMusicHandle()
 				}else if(newValue===2){
-				console.log('开始循环')
 					this.loop = true
 					innerAudioContext.loop = this.loop
-				console.log('结束循环')
 				}
 			}
 		}
@@ -132,14 +170,28 @@
 			}
 		}
 	}
+	.center{
+		display: flex;
+		justify-content: space-around;
+		box-sizing: border-box;
+		position: absolute;
+		bottom: 250rpx;
+		width: 750rpx;
+		i{
+			font-size: 60rpx;
+		}
+		.iconxihuan1{
+			color: red;
+		}
+	}
 	.bottom{
 		display: flex;
 		justify-content: space-around;
-		position: absolute;
-		bottom: 100rpx;
 		width: 750rpx;
 		padding: 0 70rpx;
 		box-sizing: border-box;
+		position: absolute;
+		bottom: 80rpx;
 		i{
 			font-size: 100rpx;
 		}

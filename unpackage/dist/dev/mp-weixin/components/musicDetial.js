@@ -168,6 +168,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _index = __webpack_require__(/*! @/api/index.js */ 22);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}
 var innerAudioContext = uni.createInnerAudioContext();var _default =
 {
@@ -180,7 +193,9 @@ var innerAudioContext = uni.createInnerAudioContext();var _default =
       musicWord: '', //音乐歌词
       toggleWord: false, //歌词与封面的切换
       loop: false, //是否循环
-      model: 0 //模式切换（0、列表循环，1、随机播放，2、单曲循环）
+      model: 0, //模式切换（0、列表循环，1、随机播放，2、单曲循环）
+      like: false, //是否喜欢
+      simiMusicIdArray: [] //相似音乐的id
     };
   },
   onLoad: function onLoad(options) {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
@@ -223,19 +238,42 @@ var innerAudioContext = uni.createInnerAudioContext();var _default =
       if (this.model > 2) {
         this.model = 0;
       }
+    },
+    //下一首歌曲
+    next: function next() {var _this4 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {return _regenerator.default.wrap(function _callee4$(_context4) {while (1) {switch (_context4.prev = _context4.next) {case 0:_context4.next = 2;return (
+                  _this4.getSimiMusicHandle());case 2:_context4.next = 4;return (
+                  _this4.getMusicItem());case 4:_context4.next = 6;return (
+                  _this4.playMusic());case 6:_context4.next = 8;return (
+                  _this4.getMusicWord());case 8:case "end":return _context4.stop();}}}, _callee4);}))();
+    },
+    //上一首歌曲
+    up: function up() {var _this5 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {return _regenerator.default.wrap(function _callee5$(_context5) {while (1) {switch (_context5.prev = _context5.next) {case 0:_context5.next = 2;return (
+                  _this5.getSimiMusicHandle());case 2:_context5.next = 4;return (
+                  _this5.getMusicItem());case 4:_context5.next = 6;return (
+                  _this5.playMusic());case 6:_context5.next = 8;return (
+                  _this5.getMusicWord());case 8:case "end":return _context5.stop();}}}, _callee5);}))();
+    },
+    //切换是否喜欢
+    likeToggle: function likeToggle() {
+      this.like = !this.like;
+    },
+    //获取相似歌曲
+    getSimiMusicHandle: function getSimiMusicHandle() {var _this6 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {var simiMusicArray;return _regenerator.default.wrap(function _callee6$(_context6) {while (1) {switch (_context6.prev = _context6.next) {case 0:_context6.next = 2;return (
+                  (0, _index.getSimiMusic)(_this6.id));case 2:simiMusicArray = _context6.sent;
+                _this6.simiMusicIdArray = simiMusicArray.map(function (item) {return item.privilege.id;});
+                console.log(_this6.simiMusicIdArray);
+                _this6.id = _this6.simiMusicIdArray[parseInt(Math.random() * 5)];case 6:case "end":return _context6.stop();}}}, _callee6);}))();
     } },
 
   watch: {
     model: function model(newValue, oldValue) {
+      innerAudioContext.loop = false;
       if (newValue === 0) {
-
       } else if (newValue === 1) {
-
+        this.getSimiMusicHandle();
       } else if (newValue === 2) {
-        console.log('开始循环');
         this.loop = true;
         innerAudioContext.loop = this.loop;
-        console.log('结束循环');
       }
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

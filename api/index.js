@@ -68,3 +68,16 @@ export function getMusicDetail(id){
 		})
 	})
 }
+//获取相似歌曲
+export function getSimiMusic(id){
+	return new Promise((resolve,reject)=>{
+		uni.request({
+			url:baseUrl+'/simi/song?id='+id,
+			success:(res)=>{
+				if(res.data.code===200){
+					resolve(res.data.songs)
+				}
+			}
+		})
+	})
+}

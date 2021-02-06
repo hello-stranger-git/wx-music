@@ -8772,7 +8772,7 @@ if (hadRuntime) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.newsong = newsong;exports.getMusic = getMusic;exports.getMusicWorld = getMusicWorld;exports.searchMusic = searchMusic;exports.getMusicDetail = getMusicDetail;var baseUrl = 'http://192.168.2.125:3000';
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.newsong = newsong;exports.getMusic = getMusic;exports.getMusicWorld = getMusicWorld;exports.searchMusic = searchMusic;exports.getMusicDetail = getMusicDetail;exports.getSimiMusic = getSimiMusic;var baseUrl = 'http://192.168.2.125:3000';
 // 推荐新音乐
 function newsong() {
   return new Promise(function (resolve, reject) {
@@ -8837,6 +8837,19 @@ function getMusicDetail(id) {
       success: function success(res) {
         if (res.data.code === 200) {
           resolve(res.data.songs[0]);
+        }
+      } });
+
+  });
+}
+//获取相似歌曲
+function getSimiMusic(id) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: baseUrl + '/simi/song?id=' + id,
+      success: function success(res) {
+        if (res.data.code === 200) {
+          resolve(res.data.songs);
         }
       } });
 
