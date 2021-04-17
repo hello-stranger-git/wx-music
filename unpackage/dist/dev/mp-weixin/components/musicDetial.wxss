@@ -1,0 +1,182 @@
+.musicDetail.data-v-22eea6fb {
+  position: relative;
+  min-height: 100vh;
+}
+.musicDetail .top.data-v-22eea6fb {
+  height: 740rpx;
+  width: 750rpx;
+  position: relative;
+  overflow-y: auto;
+}
+.musicDetail .top .imgView.data-v-22eea6fb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+.musicDetail .top .imgView image.data-v-22eea6fb {
+  width: 600rpx;
+  height: 600rpx;
+  border-radius: 50%;
+  -webkit-animation: rotate-data-v-22eea6fb 8s linear infinite;
+          animation: rotate-data-v-22eea6fb 8s linear infinite;
+  box-shadow: 10px 10px 50rpx #888888;
+}
+.musicDetail .center.data-v-22eea6fb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 350rpx;
+  width: 750rpx;
+}
+.musicDetail .center ._i.data-v-22eea6fb {
+  font-size: 60rpx;
+}
+.musicDetail .center .iconxihuan1.data-v-22eea6fb {
+  color: red;
+}
+.musicDetail .progress.data-v-22eea6fb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  padding: 0 20rpx;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  position: absolute;
+  bottom: 250rpx;
+  width: 750rpx;
+  box-sizing: border-box;
+}
+.musicDetail .progress .left.data-v-22eea6fb {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.musicDetail .progress .pro.data-v-22eea6fb {
+  -webkit-box-flex: 3;
+  -webkit-flex: 3;
+          flex: 3;
+}
+.musicDetail .progress .right.data-v-22eea6fb {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  text-align: right;
+}
+.musicDetail .bottom.data-v-22eea6fb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  width: 750rpx;
+  padding: 0 70rpx;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 80rpx;
+}
+.musicDetail .bottom ._i.data-v-22eea6fb {
+  font-size: 100rpx;
+}
+.musicDetail .bottom .model.data-v-22eea6fb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.musicDetail .bottom .model ._i.data-v-22eea6fb {
+  font-size: 55rpx;
+}
+.musicDetail .bottom .play.data-v-22eea6fb {
+  -webkit-box-flex: 3;
+  -webkit-flex: 3;
+          flex: 3;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.musicDetail .bottom .play .left ._i.data-v-22eea6fb,
+.musicDetail .bottom .play .right ._i.data-v-22eea6fb {
+  font-size: 65rpx;
+}
+.musicDetail .bottom .list.data-v-22eea6fb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+          justify-content: flex-end;
+}
+.musicDetail .bottom .list ._i.data-v-22eea6fb {
+  font-size: 55rpx;
+}
+@-webkit-keyframes rotate-data-v-22eea6fb {
+0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+}
+25% {
+    -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+}
+50% {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+}
+75% {
+    -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+}
+100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+}
+}
+@keyframes rotate-data-v-22eea6fb {
+0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+}
+25% {
+    -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+}
+50% {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+}
+75% {
+    -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+}
+100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+}
+}
+
